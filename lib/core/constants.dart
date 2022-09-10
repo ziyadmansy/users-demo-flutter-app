@@ -8,8 +8,10 @@ const String File_ERROR_MESSAGE =
     'Couldn\'t open the File, Incompatibility issue';
 
 const String APP_NAME = 'Users Demo';
+const String imagePlaceHolderError =
+    'https://via.placeholder.com/150.png?text=Error+404';
 
-const double kCardBorderRadius = 12.0;
+const double kCardBorderRadius = 16.0;
 const double kSearchFieldBorderRadius = 28.0;
 const double kCardElevation = 8.0;
 

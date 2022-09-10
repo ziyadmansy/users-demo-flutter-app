@@ -11,29 +11,61 @@ class UsersCubit extends Cubit<UsersCubitState> {
   UsersCubit(this.usersRepo) : super(UsersCubitInitial());
 
   List<User> _users = [];
-  List<User> _pickedUsers = [];
+  List<User> _filteredSearchUsers = [];
 
-  List<User> get pickedUsers => _pickedUsers;
+  List<User> get filteredSearchUsers => _filteredSearchUsers;
+
+  set filteredSearchUsers(List<User> filteredSearchUsers) {
+    _filteredSearchUsers = filteredSearchUsers;
+  }
+  // List<User> _pickedUsers = [];
+
+  // List<User> get pickedUsers => _pickedUsers;
   List<User> get users => _users;
 
   set users(List<User> users) {
     _users = users;
   }
 
-  set pickedUsers(List<User> pickedUsers) {
-    _pickedUsers = pickedUsers;
-  }
+  // set pickedUsers(List<User> pickedUsers) {
+  //   _pickedUsers = pickedUsers;
+  // }
 
-  Future<void> getUsersData({int count = 1}) async {
+  Future<void> getUsersData({int count = 10}) async {
     try {
-      _users = await usersRepo.getUsersData(count: count);
+      Map<String, dynamic> decodedResponse =
+          await usersRepo.getUsersData(count: count);
+      _users = (decodedResponse['users'] as List)
+          .map((user) => User.fromJson(user))
+          .toList();
+      _filteredSearchUsers = _users;
       emit(UsersLoadSuccessState());
     } catch (e) {
+      print(e);
       emit(UsersLoadFailState());
     }
   }
 
-  void filterPickedUsers() {
-    _pickedUsers = _users.where((user) => user.isUserPicked).toList();
+  List<User> filterPickedUsers() {
+    return _users.where((user) => user.isUserPicked).toList();
+  }
+
+  void filterSearchedUsers(String searchQuery) {
+    if (searchQuery.isEmpty) {
+      _filteredSearchUsers = _users;
+    } else {
+      _filteredSearchUsers = _users
+          .where(
+            (user) =>
+                (user.firstName!
+                    .toLowerCase()
+                    .contains(searchQuery.toLowerCase())) ||
+                (user.lastName!
+                    .toLowerCase()
+                    .contains(searchQuery.toLowerCase())),
+          )
+          .toList();
+    }
+    emit(UsersSearchQueryFinished());
   }
 }

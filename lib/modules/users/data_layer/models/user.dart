@@ -82,7 +82,7 @@ class User {
       image: json['image'],
       bloodGroup: json['bloodGroup'],
       height: json['height'],
-      weight: json['weight'],
+      weight: double.tryParse(json['weight'].toString()),
       eyeColor: json['eyeColor'],
       hair: json['hair'] != null ? Hair.fromJson(json['hair']) : null,
       domain: json['domain'],

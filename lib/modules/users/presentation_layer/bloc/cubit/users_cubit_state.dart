@@ -10,3 +10,5 @@ class UsersLoadSuccessState extends UsersCubitState {}
 
 // Whenever users fail to load
 class UsersLoadFailState extends UsersCubitState {}
+
+class UsersSearchQueryFinished extends UsersCubitState {}

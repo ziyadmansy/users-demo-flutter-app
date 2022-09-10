@@ -8,14 +8,15 @@ class UsersRepository {
 
   UsersRepository(this.usersService);
 
-  Future<List<User>> getUsersData({int count = 1}) async {
+  Future<Map<String, dynamic>> getUsersData({int count = 1}) async {
     try {
       final rawResponse = await usersService.getUsers(count: count);
       final Map<String, dynamic> decodedResponse = json.decode(rawResponse);
 
       // Returns users array only and abandon unneeded keys
-      return decodedResponse['users'];
+      return decodedResponse;
     } catch (e) {
+      print(e);
       rethrow;
     }
   }
